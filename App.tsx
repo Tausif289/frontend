@@ -8,6 +8,7 @@ import CartScreen from "./screens/CartScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import { CartProvider } from "./context/CartContex"; // ✅ fixed
 import { Product } from "./types";
+import { WishlistProvider } from "./context/WishlistContext";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -21,6 +22,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export default function App() {
   return (
     <CartProvider>
+      <WishlistProvider>
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="Home" component={HomeScreen} />
@@ -29,6 +31,7 @@ export default function App() {
           <Stack.Screen name="Profile" component={ProfileScreen} />
         </Stack.Navigator>
       </NavigationContainer>
+      </WishlistProvider>
     </CartProvider>
   );
 }

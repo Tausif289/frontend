@@ -19,53 +19,14 @@ import {DATA} from "../data/data";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 
-// const DATA: Product[] = [
-//   {
-//     id: "1",
-//     name: "Shoes",
-//     price: 2000,
-//     image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff",
-//   },
-//   {
-//     id: "2",
-//     name: "Shirt",
-//     price: 1000,
-//     image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
-//   },
-//   {
-//     id: "3",
-//     name: "Watch",
-//     price: 3000,
-//     image: "https://images.unsplash.com/photo-1511385348-a52b4a160dc2",
-//   },
-//   {
-//     id: "4",
-//     name: "Bag",
-//     price: 1500,
-//     image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3",
-//   },
-//   {
-//     id: "5",
-//     name: "Laptop",
-//     price: 50000,
-//     image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8",
-//   },
-//   {
-//     id: "6",
-//     name: "Headphones",
-//     price: 2500,
-//     image: "https://images.unsplash.com/photo-1518449039790-1a5f4b1c7b59",
-//   },
-// ];
-
 export default function HomeScreen({ navigation }: Props) {
   const [search, setSearch] = useState("");
   const [refreshing, setRefreshing] = useState(false);
-  const { addToCart, removeFromCart } = useContext(CartContext);
+  const { addToCart, removeFromCart,cart } = useContext(CartContext);
   const filtered = DATA.filter((item) =>
     item.name.toLowerCase().includes(search.toLowerCase())
   );
-
+  const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
   const onRefresh = () => {
     setRefreshing(true);
     setTimeout(() => setRefreshing(false), 1000);
@@ -76,13 +37,31 @@ export default function HomeScreen({ navigation }: Props) {
       
       {/* 🔥 Header */}
       <View style={styles.header}>
-        <Text style={styles.logo}>ShopEasy 🛒</Text>
+  <Text style={styles.logo}>ShopEasy 🛒</Text>
 
-        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-          <Text style={styles.profile}>👤</Text>
-        </TouchableOpacity>
-      </View>
+  <View style={{ flexDirection: "row", alignItems: "center" }}>
+    
+    {/* 🛒 Cart */}
+    <TouchableOpacity
+      onPress={() => navigation.navigate("Cart")}
+      style={{ marginRight: 15 }}
+    >
+      <Text style={{ fontSize: 22 }}>🛒</Text>
 
+      {totalQty > 0 && (
+        <View style={styles.badge}>
+          <Text style={styles.badgeText}>{totalQty}</Text>
+        </View>
+      )}
+    </TouchableOpacity>
+
+    {/* 👤 Profile */}
+    <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+      <Text style={styles.profile}>👤</Text>
+    </TouchableOpacity>
+
+  </View>
+</View>
       {/* 🔍 Search Bar */}
       <TextInput
         placeholder="Search for products..."
@@ -155,7 +134,20 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
   },
+  badge: {
+  position: "absolute",
+  top: -5,
+  right: -10,
+  backgroundColor: "red",
+  borderRadius: 10,
+  paddingHorizontal: 6,
+},
 
+badgeText: {
+  color: "#fff",
+  fontSize: 10,
+  fontWeight: "bold",
+},
   logo: {
     color: "#fff",
     fontSize: 20,
@@ -225,7 +217,7 @@ cartBtn: {
   },
   profile: {
     fontSize: 24,
-    color: "#fff",
+    color: "#f9bcbc",
   },
 
   search: {

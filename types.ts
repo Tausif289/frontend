@@ -5,12 +5,16 @@ export type Product = {
   image: string;
 };
 
-export type CartItem = Product & {
-  qty: number;
-};
+
 export type RootStackParamList = {
   Home: undefined;
   Product: { item: Product }; // ✅ must match exactly
   Cart: undefined;
   Profile: undefined;
 };
+// types.ts
+export interface CartItem {
+  id: number;
+  name: string;
+  qty: number;
+}
